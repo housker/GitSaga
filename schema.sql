@@ -16,7 +16,7 @@ CREATE TABLE `chapters` (
   `content` TEXT(500),
   `votes` INTEGER,
   `geolocation` CHAR(50),
-  `updated` TIMESTAMP,
+  `updated` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 );
 

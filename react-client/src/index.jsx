@@ -49,6 +49,11 @@ class App extends React.Component {
 
   componentDidMount() {
     this.drawGlobe();
+
+  }
+
+  componentDidUpdate() {
+console.log('this.state.mode: ', this.state.mode)
   }
 
   drawGlobe() {
@@ -120,6 +125,7 @@ class App extends React.Component {
   }
 
   save() {
+    console.log('save is being called')
   var newContent = this.quillRef.getContents()
   var diff = this.oldContent.diff(newContent)
   for (var i = 0; i < diff.ops.length; i++) {
@@ -134,6 +140,7 @@ class App extends React.Component {
     var adjusted = this.oldContent.compose(diff);
     var converter = new DeltaConverter(adjusted.ops, {});
     var html = converter.convert();
+    console.log('html: ', html)
     this.setState({votes: 0}, () =>{
       fetch('/items', {
         method: 'POST',
