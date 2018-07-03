@@ -55,6 +55,6 @@ app.put('/votes', function (req, res) {
 app.listen(port, function() {
   console.log(`listening on port ${port}!`);
   items.check();
-  console.log(items.url)
+  // console.log(items.url)
 });
 

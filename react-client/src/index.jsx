@@ -5,6 +5,11 @@ import $ from 'jquery';
 import Quill from 'quill';
 import ReactQuill from 'react-quill';
 import DeltaConverter from 'quill-delta-to-html';
+// import * as d3 from 'd3';
+// import * as topojson from 'topojson';
+
+
+// import planetaryjs from './planetaryjs.min.js'
 import List from './components/List.jsx';
 import Chapter from './components/Chapter.jsx';
 import Editor from './components/Editor.jsx';

@@ -10,7 +10,7 @@ var mysql = require('mysql');
 // });
 
 //connection for heroku:
-const connection = mysql.createConnection(process.env.JAWSDB_URL || require('../config').jawsDB);
+const connection = mysql.createConnection(process.env.JAWSDB_URL || require('../.config').jawsDB);
 
 var url =  process.env.JAWSDB_URL;
 
