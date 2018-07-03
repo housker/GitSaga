@@ -12,10 +12,12 @@ var mysql = require('mysql');
 //connection for heroku:
 const connection = mysql.createConnection(process.env.JAWSDB_URL || require('../.config').jawsDB);
 
-var check = function() {
+connection.connect();
+
+exports.check = function() {
   connection.connect(function(err) {
     if (err) throw err;
-    console.log(`connected to database through ${connection}`);
+    console.log('connected to database');
   });
 };
 
