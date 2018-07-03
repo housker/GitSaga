@@ -1,19 +1,16 @@
 var mysql = require('mysql');
 
-var connection = mysql.createConnection({
-  host     : process.env.RDS_HOSTNAME || 'localhost',
-  user     : process.env.RDS_USERNAME || 'root',
-  password : process.env.RDS_PASSWORD || '',
-  port     : process.env.RDS_PORT || '',
-  database : process.env.RDS_DB_NAME || 'gitsaga'
-});
-
+//connection for local or AWS:
 // var connection = mysql.createConnection({
-//   host     : 'localhost',
-//   user     : 'root',
-//   password : '',
-//   database : 'gitsaga'
+//   host     : process.env.RDS_HOSTNAME || 'localhost',
+//   user     : process.env.RDS_USERNAME || 'root',
+//   password : process.env.RDS_PASSWORD || '',
+//   port     : process.env.RDS_PORT || '',
+//   database : process.env.RDS_DB_NAME || 'gitsaga'
 // });
+
+//connection for heroku:
+const connection = mysql.createConnection(process.env.JAWSDB_URL || require('../.config').jawsDB);
 
 var check = function() {
   connection.connect(function(err) {

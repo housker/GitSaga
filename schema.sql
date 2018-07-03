@@ -2,7 +2,11 @@
 
 -- CREATE DATABASE test;
 
-USE ebdb;
+-- for aws database:
+-- USE ebdb;
+
+-- for heroku database:
+USE iqy02tckn5yjfx86
 
 DROP TABLE IF EXISTS `chapters`;
 
