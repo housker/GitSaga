@@ -15,7 +15,7 @@ const connection = mysql.createConnection(process.env.JAWSDB_URL || require('../
 var check = function() {
   connection.connect(function(err) {
     if (err) throw err;
-    console.log("connected to database");
+    console.log(`connected to database through ${connection}`);
   });
 };
 
