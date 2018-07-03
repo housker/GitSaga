@@ -3,7 +3,7 @@ const app = express();
 const port = process.env.PORT || 3000
 const bodyParser = require('body-parser');
 const url = require('url');
-const items = require('../database-mysql/index.js');
+const items = require('../database-mysql');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

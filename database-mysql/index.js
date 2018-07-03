@@ -10,16 +10,16 @@ var mysql = require('mysql');
 // });
 
 //connection for heroku:
-const connection = mysql.createConnection(process.env.JAWSDB_URL || require('../.config').jawsDB);
+const connection = mysql.createConnection(process.env.JAWSDB_URL;
 
 connection.connect();
 
-exports.check = function() {
-  connection.connect(function(err) {
-    if (err) throw err;
-    console.log('connected to database');
-  });
-};
+// var check = function() {
+//   connection.connect(function(err) {
+//     if (err) throw err;
+//     console.log('connected to database');
+//   });
+// };
 
 var selectChapter = function(title, callback) {
   connection.query(`SELECT * FROM chapters WHERE title = '${title}' ORDER BY updated DESC LIMIT 1`, function(err, results, fields) {
