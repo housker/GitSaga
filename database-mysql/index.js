@@ -10,7 +10,9 @@ var mysql = require('mysql');
 // });
 
 //connection for heroku:
-const connection = mysql.createConnection(process.env.JAWSDB_URL || require('../.config').jawsDB);
+const connection = mysql.createConnection(process.env.JAWSDB_URL || require('../config').jawsDB);
+
+var url =  process.env.JAWSDB_URL;
 
 var check = function() {
   connection.connect(function(err) {
@@ -94,3 +96,4 @@ module.exports.selectCities = selectCities;
 module.exports.updateVotes = updateVotes;
 module.exports.insert = insert;
 module.exports.check = check;
+module.exports.url = url;
