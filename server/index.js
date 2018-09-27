@@ -41,6 +41,16 @@ app.post('/items', function (req, res) {
   });
 });
 
+app.post('/perm', function (req, res) {
+  items.reformat(req.body, function(err, data) {
+    if(err) {
+      res.sendStatus(500);
+    } else {
+      res.json(data);
+    }
+  });
+});
+
 app.put('/votes', function (req, res) {
   items.updateVotes(req.body, function(err, data) {
     if(err) {

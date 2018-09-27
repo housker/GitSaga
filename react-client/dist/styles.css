@@ -4,7 +4,7 @@
 }
 
 body {
-  background-color: powderblue;
+ /* background-color: powderblue;*/
   font-family: 'Skranji', Palatino;
 }
 
@@ -12,31 +12,26 @@ body {
     display: none;
 }
 */
-#vote{
+/*#vote{
   display: none;
-}
-
-/*.votes {
-  height: 10px;
 }*/
 
 .visible {
   display: block;
 }
 
-#title {
+/*#title {
   display: inline-block;
   float: left;
   vertical-align: top
-}
+}*/
 
-.button {
+/*.button {
   height: 10px;
-  /*display: block;*/
   padding: 3px;
   display: inline-block;
   vertical-align: top
-}
+}*/
 
 .content {
   position: absolute;
@@ -51,10 +46,6 @@ body {
 }
 
 .home {
-  vertical-align: top;
-}
-
-.cityInput {
   vertical-align: top;
 }
 
@@ -1117,4 +1108,151 @@ body {
     opacity: 1;
   }
 }
+
+
+#globe-container {
+  position: relative;
+  /*border: 5px solid blue;*/
+  height: 90vh;
+  width: 98vw;
+  padding: 0;
+  margin: 0;
+}
+
+#goto {
+  position: fixed;
+  z-index: 1;
+  /*border: 5px solid green;*/
+  left: calc(-50vw + 50%);
+  right: calc(-50vw + 50%);
+  margin: 20vh auto;
+  width: 200px;
+  min-height: 30%;
+  text-align: center;
+}
+
+#goto * {
+  text-align: center;
+}
+
+/*#globe {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  width: 100%;
+  padding: 200px 200px 0px 0px;
+  margin: auto;
+  border: 5px solid red;
+}*/
+
+/*#globe {
+left: calc(-50vw + 50%);
+right: calc(-50vw + 50%);
+margin-left: auto;
+margin-right: auto;
+}*/
+
+#globe {
+  position: relative;
+  opacity: 0.60;
+  left: 12%;
+  top: -10%;
+  /*transform: translate(-50%, -50%);*/
+  /*margin: 50vh auto;*/
+    /*border: 5px solid red;*/
+  height: 80vh;
+  max-width: 100%;
+}
+
+#starsVideo {
+  position: fixed;
+  margin: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0;
+  min-width: 100%;
+  height: 350%;
+}
+
+#initButton {
+  position: absolute;
+  width: 40%;
+  transform: translate(50%);
+  font-size: 16px;
+  border-radius: 3px;
+}
+
+#top-bar {
+  display: flex;
+  /*flex-direction: row;*/
+  justify-content: space-around;
+  align-items: center;
+/*  position: relative;*/
+    /*border: 5px solid red;*/
+}
+/*  width: 90vw;
+  height: 100px;*/
+
+.chapter {
+  position: relative;
+}
+
+#title {
+  position: relative ;
+  min-width: 100px
+  height: 100px;
+  /*border: 5px solid green;*/
+}
+
+/*  position: absolute;
+  flex-grow: 1;
+
+  display: inline;
+  top: 30px;*/
+
+#forkButton {
+  position: absolute;
+  width: 100px;
+  top: 5%;
+  left: 80vw;
+  right: 5px;
+  font-size: 20px;
+  border-radius: 3px;
+  /*border: 5px solid blue;*/
+}
+
+.votes {
+  position: absolute;
+  left: 5px;
+  height: 10px;
+}
+
+.votes input {
+  margin: 0 10px 0 10px;
+}
+
+#homeTitle {
+  font-size: 40px;
+  margin: 15px;
+}
+
+#cityInput {
+  font-size: 16px;
+  vertical-align: top;
+}
+
+/*
+  top: 30px;
+  right: 30px;
+  display: inline;
+  margin: auto;
+  position: absolute;
+  flex-grow: 1;
+*/
+
+
+
 

@@ -27,7 +27,7 @@ var selectChapter = function(title, callback) {
       console.log('error in selectChapter: ', err)
       callback(err, null);
     } else {
-      console.log('results from selectChapter: ', results)
+      // console.log('results from selectChapter: ', results)
       callback(null, results);
     }
   });
@@ -91,9 +91,23 @@ var insert = function(body, callback) {
   })
 }
 
+var reformat = function(body, callback) {
+  var values = [body.title, body.content, body.geolocation, body.votes]
+  connection.query('UPDATE chapters SET title=body.title, content=body.content, geolocation=body.geolocation, votes=body.votes WHERE id=body.id', function(err, results, fields) {
+    if(err) {
+      console.log('error in insert: ', err)
+      callback(err, null);
+    } else {
+      console.log('results in update: ', results)
+      callback(null, results);
+    }
+  })
+}
+
 module.exports.selectChapter = selectChapter;
 module.exports.selectCities = selectCities;
 module.exports.updateVotes = updateVotes;
 module.exports.insert = insert;
+module.exports.reformat = reformat;
 module.exports.check = check;
 module.exports.url = url;

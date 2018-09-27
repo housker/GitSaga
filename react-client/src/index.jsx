@@ -25,7 +25,8 @@ class App extends React.Component {
       isHovering: false,
       votes: 0,
       geolocation: [],
-      content: { __html: '<p>There was a story.<span style="color:#003700;background-color:#cce8cc"> And this is the next part.</span></p>'}
+      content: { __html: '<p>There was a story.<span style="color:#003700;background-color:#cce8cc"> And this is the next part.</span></p>'},
+      id: undefined
     }
     this.quillRef = null;
     this.geocoder = undefined;
@@ -48,12 +49,8 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    // document.querySelector('video').playbackRate = .3;
     this.drawGlobe();
-
-  }
-
-  componentDidUpdate() {
-console.log('this.state.mode: ', this.state.mode)
   }
 
   drawGlobe() {
@@ -91,9 +88,9 @@ console.log('this.state.mode: ', this.state.mode)
   loadPlugin() {
     this.planet.loadPlugin(planetaryjs.plugins.earth({
       topojson: { file: './world-110m.json' },
-      oceans:   { fill:  '#497287'},
-      land:     { fill: '#000000'},
-      borders:  { stroke: '#de8048'}
+      oceans:   { fill:  '#dbd9da'},
+      land:     { fill: '#afacad'},
+      borders:  { stroke: '#afacad'}
     }));
     this.planet.loadPlugin(planetaryjs.plugins.pings({color: 'yellow', ttl: 5000, angle: 10}));
     this.planet.loadPlugin(planetaryjs.plugins.drag());
@@ -110,6 +107,7 @@ console.log('this.state.mode: ', this.state.mode)
         this.setState({
           geolocation: JSON.parse(data[0].geolocation),
           content: {__html: data[0].content},
+          id: data[0].id,
           votes: data[0].votes
         })
       },
@@ -125,14 +123,13 @@ console.log('this.state.mode: ', this.state.mode)
   }
 
   save() {
-    console.log('save is being called')
-  var newContent = this.quillRef.getContents()
-  var diff = this.oldContent.diff(newContent)
-  for (var i = 0; i < diff.ops.length; i++) {
+    var newContent = this.quillRef.getContents()
+    var diff = this.oldContent.diff(newContent)
+    for (var i = 0; i < diff.ops.length; i++) {
       var op = diff.ops[i];
       if (op.hasOwnProperty('insert')) {
         op.attributes = {
-          background: "#cce8cc",
+          background: "#dbd9da",
           color: "#003700"
         };
       }
@@ -140,7 +137,6 @@ console.log('this.state.mode: ', this.state.mode)
     var adjusted = this.oldContent.compose(diff);
     var converter = new DeltaConverter(adjusted.ops, {});
     var html = converter.convert();
-    console.log('html: ', html)
     this.setState({votes: 0}, () =>{
       fetch('/items', {
         method: 'POST',
@@ -155,7 +151,6 @@ console.log('this.state.mode: ', this.state.mode)
         }
       })
       .then(res => res.json())
-      .then(jsonRes => console.log('jsonRes: ', jsonRes))
       .then(jsonRes => this.setState({mode: 'globe'}))
       .then(jsonRes => this.drawGlobe())
       .catch(err => console.log(err));
@@ -173,17 +168,28 @@ hide() {
 }
 
 upVote() {
-  if(this.state.votes > 10) {
-    let xmlString = this.state.content.__html;
-    let parser = new DOMParser();
-    let doc = parser.parseFromString(xmlString, "text/xml");
-    var childContent = doc.childNodes[0].textContent;
+  if(this.state.votes === 10) {
+    let noSpan = this.state.content.__html.replace(/<span[^>]*>|<\/span>/g, '');
     this.setState({votes: ++this.state.votes},() => {
-      this.setState({content: { __html: `<p>${childContent}</p>`}}, () => {
+      this.setState({content: { __html: noSpan}}, () => {
         this.updateVotes();
       })
     });
-
+    fetch('/perm', {
+      method: 'POST',
+      body: JSON.stringify({
+        id: this.state.id,
+        title: this.state.title,
+        content: noSpan,
+        votes: this.state.votes,
+        geolocation: JSON.stringify(this.state.geolocation)
+      }),
+      headers: {
+        'content-type': 'application/json'
+      }
+    })
+    .then(res => res.json())
+    .catch(err => console.log(err));
   } else {
     this.setState({votes: ++this.state.votes},() => {
       this.updateVotes();
@@ -212,7 +218,6 @@ updateVotes() {
     }
   })
   .then(res => res.json())
-  .then(jsonRes => console.log('jsonRes: ', jsonRes))
   .catch(err => console.log(err));
 
 }
@@ -268,29 +273,35 @@ updateVotes() {
       case 'globe':
         mode =
           <div>
-            <h2 className="title">Git Saga</h2>
-            <input ref={el => this.cityInput = el} className="cityInput" name="data" type="radio" list="data" type="text" placeholder="city, country" />
-            <datalist className="dropdown" ref="dList" id="data" >
+            <video autoPlay muted loop id="starsVideo">
+              <source src="video.mp4" type="video/mp4" />
+            </video>
+            <div id="goto">
+              <h2 className="title" id="homeTitle">Git Saga</h2>
+              <input ref={el => this.cityInput = el} id="cityInput" name="data" type="radio" list="data" type="text" placeholder="city, country" />
+                <datalist className="dropdown" ref="dList" id="data" >
+                {this.state.cities.map((city, i) => <option className="dropdown" key={i} value={city} />)}
+                </datalist>
+              <button className="main" id="initButton" onClick={this.click}>{button}</button>
+            </div>
             {this.state.cities.map((city, i) => <option className="dropdown" key={i} value={city} />)}
-            </datalist>
             <canvas onClick={this.takeLocation} id='globe' width='750' height='750'></canvas>
           </div>;
         break;
       case 'chapter':
-        mode = <Chapter mode={this.state.mode} title={this.state.title} upVote={this.upVote} downVote={this.downVote} votes={this.state.votes} reveal={this.reveal} hide={this.hide} isHovering={this.state.isHovering} content={this.state.content} edit={this.edit} loadQR={this.loadQR} loadChapter={this.loadChapter} button={button}/>;
+        mode = <Chapter mode={this.state.mode} title={this.state.title} upVote={this.upVote} downVote={this.downVote} votes={this.state.votes} reveal={this.reveal} hide={this.hide} isHovering={this.state.isHovering} content={this.state.content} edit={this.edit} loadQR={this.loadQR} loadChapter={this.loadChapter} button={button} click={this.click}/>;
         break;
       case 'editor':
-        mode = <Chapter mode={this.state.mode} title={this.state.title} upVote={this.upVote} downVote={this.downVote} votes={this.state.votes} reveal={this.reveal} hide={this.hide} isHovering={this.state.isHovering} content={this.state.content} edit={this.edit} loadQR={this.loadQR} button={button}/>;
+        mode = <Chapter mode={this.state.mode} title={this.state.title} upVote={this.upVote} downVote={this.downVote} votes={this.state.votes} reveal={this.reveal} hide={this.hide} isHovering={this.state.isHovering} content={this.state.content} edit={this.edit} loadQR={this.loadQR} button={button} click={this.click}/>;
         break;
       case 'newEditor':
-        mode = <Editor className="editor" title={this.state.title} loadQR={this.loadQR} />;
+        mode = <Editor className="editor" title={this.state.title} loadQR={this.loadQR} button={button} click={this.click} />;
         break;
       default:
       console.log('mode not recognized')
     }
-    return (<div>
+    return (<div id="globe-container">
       {mode}
-      <button className="main" onClick={this.click}>{button}</button>
     </div>)
   }
 }
